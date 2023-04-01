@@ -26,9 +26,15 @@ def readBarPlotData(filename):
         str)
     df_Arable_Land_countries_as_columns = df_Arable_Land_countries_as_columns.rename(
         columns={'Country Name': 'Year'})
-    df_Arable_Land_countries_as_columns=df_Arable_Land_countries_as_columns.set_index('Year')
-    df_Arable_Land_countries_as_columns=df_Arable_Land_countries_as_columns.iloc[51:61,128:137]
-    df_Arable_Land_countries_as_columns=df_Arable_Land_countries_as_columns.reset_index(drop=False)
+    df_Arable_Land_countries_as_columns = df_Arable_Land_countries_as_columns.set_index(
+        'Year')
+    df_Arable_Land_countries_as_columns = df_Arable_Land_countries_as_columns.iloc[
+        51:61, 0:]
+    #countries=[[]]
+    df_Arable_Land_countries_as_columns = df_Arable_Land_countries_as_columns[[
+        'Andorra', 'Bulgaria', 'Croatia', 'Germany', 'Ghana', 'Lithuania', 'Norway', 'Sri Lanka', 'United States']]
+    df_Arable_Land_countries_as_columns = df_Arable_Land_countries_as_columns.reset_index(
+        drop=False)
     return df_Arable_Land_year_as_columns, df_Arable_Land_countries_as_columns
 
 
@@ -51,14 +57,14 @@ def readHeatData(filename1):
     return df_World_Development_Indicators_updated
 
 
-def barplot(filename,title,ylim,figure_name):
+def barplot(filename, title, ylim, figure_name):
     df1, df2 = readBarPlotData(filename)
     legends_years = ['2020', '2019', '2018', '2017', '2016', '2015']
     plt.figure(dpi=300)
-    df1.plot.bar(x='Country Name', y=['2020.0', '2019.0', '2018.0', '2017.0', '2016.0', '2015.0'], rot=90, figsize=(30, 25), 
+    df1.plot.bar(x='Country Name', y=['2020.0', '2019.0', '2018.0', '2017.0', '2016.0', '2015.0'], rot=90, figsize=(30, 25),
                    fontsize=25, label=legends_years)
-    plt.title(title,fontsize=25)
-    plt.xlabel("Country Name",fontsize=25)
+    plt.title(title, fontsize=25)
+    plt.xlabel("Country Name", fontsize=25)
     plt.ylim(0, ylim)
     plt.legend(title='Years', fontsize=25)
     plt.savefig(figure_name)
@@ -66,21 +72,24 @@ def barplot(filename,title,ylim,figure_name):
     return
 
 
-def lineplot(filename,title,ylim,figure_name):
+def lineplot(filename, title, ylimin, ylimax, figure_name):
     df1, df2 = readBarPlotData(filename)
-    countries = ['Korea, Rep.', 'Kuwait', 'Latin America & Caribbean (excluding high income)',	'Lao PDR',	'Lebanon',	'Liberia',	'Libya',	'St. Lucia',	'Latin America & Caribbean'
-]
+    df2.to_csv('data123.csv')
+    countries = [['Andorra', 'Bulgaria', 'Croatia', 'Germany', 'Ghana', 'Lithuania', 'Norway', 'Sri Lanka', 'United States']
+                 ]
     plt.figure(dpi=300)
     for i in range(len(countries)):
-        plt.plot(df2['Year'],df2[countries[i]],label=countries[i])    
-    
-    plt.title(title,fontsize=5)
-    plt.xlabel("Years",fontsize=5)
-    plt.ylim(0, ylim)
+        plt.plot(df2['Year'], df2[countries[i]], label=countries[i])
+
+    plt.title(title, fontsize=5)
+    plt.xlabel("Years", fontsize=5)
+    plt.xlim(2012, 2020)
+    plt.ylim(ylimin, ylimax)
     plt.legend(fontsize=5)
     plt.savefig(figure_name)
     plt.show()
     return
+
 
 def heatMap1():
     df1 = readHeatData("World_Development_Indicators.xlsx")
@@ -99,7 +108,7 @@ def heatMap1():
 
 
 if __name__ == "__main__":
-    barplot("Arable_Land.xls",'Arable Land',40,'BarPlot1.jpg')
-    barplot("Agricultural_Land.xls",'Agricultural Land',80,'BarPlot2.jpg')
-    lineplot('Forest_Area.xls','Forest_Area',85,'LinePlot1.jpg')
+    barplot("Arable_Land.xls", 'Arable Land', 40, 'BarPlot1.jpg')
+    barplot("Agricultural_Land.xls", 'Agricultural Land', 80, 'BarPlot2.jpg')
+    lineplot('Forest_Area.xls', 'Forest_Area', 32.5, 37, 'LinePlot1.jpg')
     heatMap1()
